@@ -1,0 +1,27 @@
+{
+  "name": "sanctuary-set",
+  "version": "0.0.0",
+  "description": "Fantasy Land compliant immutable set type",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/sanctuary-js/sanctuary-set.git"
+  },
+  "main": "src/BoxedSet.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "devDependencies": {
+    "jsverify": "0.7.x",
+    "mocha": "3.1.x",
+    "xyz": "1.0.x"
+  },
+  "files": [
+    "/src"
+  ],
+  "keywords": [
+    "fantasy-land",
+    "immutable",
+    "set"
+  ]
+}
