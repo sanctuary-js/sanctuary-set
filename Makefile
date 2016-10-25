@@ -1,5 +1,5 @@
 ESLINT = node_modules/.bin/eslint --config node_modules/sanctuary-style/eslint-es6.json --env es6
-MOCHA = node_modules/.bin/mocha
+ISTANBUL = node_modules/.bin/istanbul
 NPM = npm
 
 SRC = $(shell find src -name '*.js' | sort)
@@ -41,4 +41,5 @@ setup:
 
 .PHONY: test
 test:
-	$(MOCHA) --recursive -- test
+	$(ISTANBUL) cover node_modules/.bin/_mocha -- --recursive
+	$(ISTANBUL) check-coverage --branches 98
