@@ -1,3 +1,5 @@
+'use strict';
+
 const BaseSet = require('./BaseSet');
 
 function compareObject(x, y) {
@@ -23,7 +25,7 @@ function compareObject(x, y) {
 
   if (xKeysStr !== yKeysStr) return xKeysStr < yKeysStr ? -1 : 1;
 
-  for (let p of xKeys) {
+  for (const p of xKeys) {
     const res = compare(x[p], y[p]);
     if (res === 1) {
       return 1;
@@ -40,7 +42,7 @@ function compareArray(x, y) {
   if (x.length !== y.length) {
     return x.length < y.length ? -1 : 1;
   }
-  var i = 0, order;
+  let i = 0, order;
   while (i < x.length) {
     order = compare(x[i], y[i]);
     if (order !== 0) {
@@ -57,8 +59,8 @@ function objectType(a) {
 
 function compare(x, y) {
   if (x === y) return 0;
-  const typeX = objectType(x),
-        typeY = objectType(y);
+  const typeX = objectType(x);
+  const typeY = objectType(y);
   if (typeX !== typeY) return typeX < typeY ? -1 : 1;
   switch (typeX) {
     case 'Number':

@@ -1,10 +1,12 @@
+'use strict';
+
 /**
  * AVL tree implementation of "Parallel Ordered Sets Using Join"
  * -- https://arxiv.org/abs/1602.02120
  */
 module.exports = function Set(compare) {
 
-  const Leaf = { height: 0, size: 0 };
+  const Leaf = {height: 0, size: 0};
 
   function Node(l, k, r) {
     return {
@@ -230,8 +232,9 @@ module.exports = function Set(compare) {
    * but it turns out to be quite a bit slower than the direct
    * traverse and compare as implemented here.
    */
-  function contains(k, t) {
-    var c;
+  function contains(k, _t) {
+    let c;
+    let t = _t;
     while (t.height > 0) {
       c = compare(k, t.k);
       if (c === 0) {
@@ -270,9 +273,9 @@ module.exports = function Set(compare) {
   }
 
   function equals(xs, ys) {
-    return xs.size === ys.size && reduce(function (b, x) {
-        return b && contains(x, ys);
-      }, true, xs);
+    return xs.size === ys.size && reduce(function(b, x) {
+      return b && contains(x, ys);
+    }, true, xs);
   }
 
   function empty() {

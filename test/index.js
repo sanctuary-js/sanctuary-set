@@ -1,3 +1,5 @@
+'use strict';
+
 const jsv = require('jsverify');
 const spec = require('./spec');
 
@@ -13,9 +15,9 @@ describe('PrimSet', () => {
 });
 
 describe('BoxedSet', () => {
-  function Thing(x) {
+  const Thing = function Thing(x) {
     this.x = x;
-  }
+  };
   const ArbThing = jsv.number.smap(n => new Thing(n), thing => thing.x);
   describe('Homogeneous', () => {
     spec(BoxedSet, jsv.number);

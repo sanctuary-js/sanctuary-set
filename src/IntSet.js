@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * A set specialised to 32bit integer values. The implementation is based on
  * "Fast Mergeable Integer Maps" -- http://ittc.ku.edu/~andygill/papers/IntMap98.pdf
@@ -42,7 +44,7 @@ function tip(prefix, bitmap) {
 }
 
 // an empty set
-const Nil = { type: NilType };
+const Nil = {type: NilType};
 
 // the number of elements in the set
 function size(set) {
@@ -54,12 +56,13 @@ function size(set) {
 }
 
 // the number of bits set in the given integer
-function bitcount(x) {
-  var a = 0;
+function bitcount(_x) {
+  let a = 0;
+  let x = _x;
   while (true) {
     if (x === 0) return a;
     a += 1;
-    x &= (x - 1);
+    x &= x - 1;
   }
 }
 
@@ -89,7 +92,9 @@ function bitmapOf(x) {
 }
 
 // returns true if the given int exists in the set
-function contains(x, set) {
+function contains(x, _set) {
+  let set = _set;
+
   while (true) {
     switch (set.type) {
       case BinType:
@@ -115,7 +120,7 @@ function shorter(m1, m2) {
 
 // the highest bit value of `p1 xor p2`
 function branchMask(p1, p2) {
-  var v = p1 ^ p2;
+  let v = p1 ^ p2;
   v |= v >>> 1;
   v |= v >>> 2;
   v |= v >>> 4;
@@ -141,17 +146,20 @@ function insert(x, set) {
 function insertBM(prefix, bitmap, set) {
   switch (set.type) {
     case BinType:
-      if (nomatch(prefix, set.prefix, set.mask))
+      if (nomatch(prefix, set.prefix, set.mask)) {
         return link(prefix, Tip(prefix, bitmap), set.prefix, set);
+      }
 
-      if (zero(prefix, set.mask))
+      if (zero(prefix, set.mask)) {
         return Bin(set.prefix, set.mask, insertBM(prefix, bitmap, set.left), set.right);
+      }
 
       return Bin(set.prefix, set.mask, set.left, insertBM(prefix, bitmap, set.right));
 
     case TipType:
-      if (prefix === set.prefix)
+      if (prefix === set.prefix) {
         return Tip(prefix, bitmap | set.bitmap);
+      }
 
       return link(prefix, Tip(prefix, bitmap), set.prefix, set);
 
@@ -169,10 +177,12 @@ function remove(x, set) {
 function removeBM(prefix, bitmap, set) {
   switch (set.type) {
     case BinType:
-      if (nomatch(prefix, set.prefix, set.mask))
+      if (nomatch(prefix, set.prefix, set.mask)) {
         return set;
-      if (zero(prefix, set.mask))
+      }
+      if (zero(prefix, set.mask)) {
         return bin(set.prefix, set.mask, removeBM(prefix, bitmap, set.left), set.right);
+      }
       return bin(set.prefix, set.mask, set.left, removeBM(prefix, bitmap, set.right));
 
     case TipType:
@@ -190,16 +200,20 @@ function union(set1, set2) {
       switch (set2.type) {
         case BinType:
           if (shorter(set1.mask, set2.mask)) {
-            if (nomatch(set2.prefix, set1.prefix, set1.mask))
+            if (nomatch(set2.prefix, set1.prefix, set1.mask)) {
               return link(set1.prefix, set1, set2.prefix, set2);
-            if (zero(set2.prefix, set1.mask))
+            }
+            if (zero(set2.prefix, set1.mask)) {
               return Bin(set1.prefix, set1.mask, union(set1.left, set2), set1.right);
+            }
             return Bin(set1.prefix, set1.mask, set1.left, union(set1.right, set2));
           } else if (shorter(set2.mask, set1.mask)) {
-            if (nomatch(set1.prefix, set2.prefix, set2.mask))
+            if (nomatch(set1.prefix, set2.prefix, set2.mask)) {
               return link(set1.prefix, set1, set2.prefix, set2);
-            if (zero(set1.prefix, set2.mask))
+            }
+            if (zero(set1.prefix, set2.mask)) {
               return Bin(set2.prefix, set2.mask, union(set1, set2.left), set2.right);
+            }
             return Bin(set2.prefix, set2.mask, set2.left, union(set1, set2.right));
           } else if (set1.prefix === set2.prefix) {
             return Bin(set1.prefix, set1.mask, union(set1.left, set2.left), union(set1.right, set2.right));
@@ -223,22 +237,28 @@ function union(set1, set2) {
 }
 
 // returns a set containing all elements from `set1` that do not exist in `set2`
-function difference(set1, set2) {
+function difference(set1, _set2) {
+  let set2 = _set2;
+
   switch (set1.type) {
     case BinType:
       switch (set2.type) {
         case BinType:
           if (shorter(set1.mask, set2.mask)) {
-            if (nomatch(set2.prefix, set1.prefix, set1.mask))
+            if (nomatch(set2.prefix, set1.prefix, set1.mask)) {
               return set1;
-            if (zero(set2.prefix, set1.mask))
+            }
+            if (zero(set2.prefix, set1.mask)) {
               return bin(set1.prefix, set1.mask, difference(set1.left, set2), set1.right);
+            }
             return bin(set1.prefix, set1.mask, set1.left, difference(set1.right, set2));
           } else if (shorter(set2.mask, set1.mask)) {
-            if (nomatch(set1.prefix, set2.prefix, set2.mask))
+            if (nomatch(set1.prefix, set2.prefix, set2.mask)) {
               return set1;
-            if (zero(set1.prefix, set2.mask))
+            }
+            if (zero(set1.prefix, set2.mask)) {
               return difference(set1, set2.left);
+            }
             return difference(set1, set2.right);
           } else if (set1.prefix === set2.prefix) {
             return bin(set1.prefix, set1.mask, difference(set1.left, set2.left), difference(set1.right, set2.right));
@@ -279,13 +299,16 @@ function difference(set1, set2) {
 }
 
 // returns a set containing the intersection of the two given sets
-function intersect(set1, set2) {
+function intersect(_set1, _set2) {
+  let set1 = _set1;
+  let set2 = _set2;
+
   switch (set1.type) {
     case BinType:
       switch (set2.type) {
         case BinType:
           if (shorter(set1.mask, set2.mask)) {
-            if (nomatch(set2.prefix, set1.prefix, set1.mask))return Nil;
+            if (nomatch(set2.prefix, set1.prefix, set1.mask)) return Nil;
             if (zero(set2.prefix, set1.mask)) return intersect(set1.left, set2);
             return intersect(set1.right, set2);
           } else if (shorter(set2.mask, set1.mask)) {
@@ -367,22 +390,23 @@ function fromFoldable(f) {
 }
 
 // returns the lowest bit set for the given int
-function lowestBitSet(n) {
-  var b = 0;
+function lowestBitSet(_n) {
+  let n = _n;
+  let b = 0;
   if ((n & 0xFFFF) === 0) {
-    n = n >>> 16;
+    n >>>= 16;
     b = 16;
   }
   if ((n & 0xFF) === 0) {
-    n = n >>> 8;
+    n >>>= 8;
     b += 8;
   }
   if ((n & 0xF) === 0) {
-    n = n >>> 4;
+    n >>>= 4;
     b += 4;
   }
   if ((n & 3) === 0) {
-    n = n >>> 2;
+    n >>>= 2;
     b += 2;
   }
   if ((n & 1) === 0) {
@@ -392,17 +416,18 @@ function lowestBitSet(n) {
 }
 
 // reduces over a prefix and bitmap using the given accumulating function and initial value
-function reduceBits(prefix, f, acc, bm) {
+function reduceBits(prefix, f, _acc, bm) {
+  let acc = _acc;
   const lb = lowestBitSet(bm);
-  var bi = prefix + lb,
-      n = bm >>> lb;
+  let bi = prefix + lb;
+  let n = bm >>> lb;
   while (true) {
     if (n === 0) return acc;
     if ((n & 1) === 1) {
       acc = f(acc, bi);
     }
     bi += 1;
-    n = n >>> 1;
+    n >>>= 1;
   }
 }
 
@@ -418,7 +443,7 @@ function reduce(f, z, set) {
         return z_;
     }
   }
-  switch(set.type) {
+  switch (set.type) {
     case BinType:
       return set.mask < 0 ? go(go(z, set.right), set.left) : go(go(z, set.left), set.right);
 

@@ -1,3 +1,5 @@
+'use strict';
+
 const jsv = require('jsverify');
 
 module.exports = (Set, Arb) => {
@@ -8,18 +10,18 @@ module.exports = (Set, Arb) => {
     set => 'Set { ' + Set.toArray(set).map(Arb.show).join(', ') + ' }'
   );
 
-  //// Set.union
+  // Set.union
   jsv.property('A ∪ B = B ∪ A', SetArb, SetArb, (xs, ys) => Set.equals(
     Set.union(xs, ys),
     Set.union(ys, xs)
   ));
 
-  jsv.property('A ∪ A = A', SetArb, (xs) => Set.equals(
+  jsv.property('A ∪ A = A', SetArb, xs => Set.equals(
     Set.union(xs, xs),
     xs
   ));
 
-  jsv.property('A ∪ ∅ = A', SetArb, (xs) => Set.equals(
+  jsv.property('A ∪ ∅ = A', SetArb, xs => Set.equals(
     Set.union(xs, Set.empty()),
     xs
   ));
@@ -29,18 +31,18 @@ module.exports = (Set, Arb) => {
     Set.union(Set.union(xs, ys), zs)
   ));
 
-  //// Set.difference
-  jsv.property('A - A = ∅', SetArb, (xs) => Set.equals(
+  // Set.difference
+  jsv.property('A - A = ∅', SetArb, xs => Set.equals(
     Set.difference(xs, xs),
     Set.empty()
   ));
 
-  jsv.property('A - ∅ = A', SetArb, (xs) => Set.equals(
+  jsv.property('A - ∅ = A', SetArb, xs => Set.equals(
     Set.difference(xs, Set.empty()),
     xs
   ));
 
-  jsv.property('∅ - A = ∅', SetArb, (xs) => Set.equals(
+  jsv.property('∅ - A = ∅', SetArb, xs => Set.equals(
     Set.difference(Set.empty(), xs),
     Set.empty()
   ));
@@ -50,18 +52,18 @@ module.exports = (Set, Arb) => {
     xs
   ));
 
-  //// Set.intersect
+  // Set.intersect
   jsv.property('A ∩ B = B ∩ A', SetArb, SetArb, (xs, ys) => Set.equals(
     Set.intersect(xs, ys),
     Set.intersect(ys, xs)
   ));
 
-  jsv.property('A ∩ A = A', SetArb, (xs) => Set.equals(
+  jsv.property('A ∩ A = A', SetArb, xs => Set.equals(
     Set.intersect(xs, xs),
     xs
   ));
 
-  jsv.property('A ∩ ∅ = ∅', SetArb, (xs) => Set.equals(
+  jsv.property('A ∩ ∅ = ∅', SetArb, xs => Set.equals(
     Set.intersect(xs, Set.empty()),
     Set.empty()
   ));
@@ -71,7 +73,7 @@ module.exports = (Set, Arb) => {
     Set.intersect(Set.intersect(xs, ys), zs)
   ));
 
-  //// Various other properties (there may be some redundant tests here)
+  // Various other properties (there may be some redundant tests here)
   jsv.property('A ∩ (B - C) = B ∩ (A - C)', SetArb, SetArb, SetArb, (xs, ys, zs) => Set.equals(
     Set.intersect(xs, Set.difference(ys, zs)),
     Set.intersect(ys, Set.difference(xs, zs))
@@ -156,10 +158,10 @@ module.exports = (Set, Arb) => {
   jsv.property('size', Arb, SetArb, (x, xs) =>
     (Set.size(Set.remove(x, xs)) + 1) === Set.size(Set.insert(x, xs)));
 
-  jsv.property('size after of', Arb, (x) =>
+  jsv.property('size after of', Arb, x =>
     Set.size(Set.of(x)) === 1);
 
-  jsv.property('fromFoldable after toArray', SetArb, (xs) => Set.equals(
+  jsv.property('fromFoldable after toArray', SetArb, xs => Set.equals(
     Set.fromFoldable(Set.toArray(xs)),
     xs
   ));

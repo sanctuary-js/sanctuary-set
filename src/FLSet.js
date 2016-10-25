@@ -1,3 +1,5 @@
+'use strict';
+
 const BaseSet = require('./BaseSet');
 
 // TODO: Propose addition of Ord to FL.

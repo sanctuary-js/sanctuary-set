@@ -9,11 +9,13 @@
   },
   "main": "src/BoxedSet.js",
   "scripts": {
-    "test": "mocha"
+    "test": "make lint test"
   },
   "devDependencies": {
+    "eslint": "2.9.x",
     "jsverify": "0.7.x",
     "mocha": "3.1.x",
+    "sanctuary-style": "0.2.x",
     "xyz": "1.0.x"
   },
   "files": [
