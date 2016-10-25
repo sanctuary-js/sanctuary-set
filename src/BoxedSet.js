@@ -1,10 +1,6 @@
 const BaseSet = require('./BaseSet');
 
 function compareObject(x, y) {
-  if (Object.prototype.toString.call(y) !== '[object Object]') {
-    return 1;
-  }
-
   if (x.constructor !== y.constructor) {
     if (x.constructor == null) {
       return 1;
@@ -41,9 +37,6 @@ function compareObject(x, y) {
 }
 
 function compareArray(x, y) {
-  if (Object.prototype.toString.call(y) !== '[object Array]') {
-    return 1;
-  }
   if (x.length !== y.length) {
     return x.length < y.length ? -1 : 1;
   }

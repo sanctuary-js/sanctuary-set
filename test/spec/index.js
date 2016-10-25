@@ -146,4 +146,21 @@ module.exports = (Set, Arb) => {
     Set.intersect(Set.union(xs, ys), Set.union(xs, zs)),
     Set.union(xs, Set.intersect(ys, zs))
   ));
+
+  jsv.property('contains after insert', Arb, SetArb, (x, xs) =>
+    Set.contains(x, Set.insert(x, xs)));
+
+  jsv.property('contains after removal', Arb, SetArb, (x, xs) =>
+    !Set.contains(x, Set.remove(x, xs)));
+
+  jsv.property('size', Arb, SetArb, (x, xs) =>
+    (Set.size(Set.remove(x, xs)) + 1) === Set.size(Set.insert(x, xs)));
+
+  jsv.property('size after of', Arb, (x) =>
+    Set.size(Set.of(x)) === 1);
+
+  jsv.property('fromFoldable after toArray', SetArb, (xs) => Set.equals(
+    Set.fromFoldable(Set.toArray(xs)),
+    xs
+  ));
 };

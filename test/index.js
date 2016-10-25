@@ -13,15 +13,20 @@ describe('PrimSet', () => {
 });
 
 describe('BoxedSet', () => {
+  function Thing(x) {
+    this.x = x;
+  }
+  const ArbThing = jsv.number.smap(n => new Thing(n), thing => thing.x);
   describe('Homogeneous', () => {
     spec(BoxedSet, jsv.number);
     spec(BoxedSet, jsv.string);
     spec(BoxedSet, jsv.bool);
     spec(BoxedSet, jsv.dict(jsv.number));
     spec(BoxedSet, jsv.array(jsv.number));
+    spec(BoxedSet, ArbThing);
   });
   describe('Heterogeneous', () => {
-    spec(BoxedSet, jsv.json);
+    spec(BoxedSet, jsv.oneof(jsv.constant(Object.create(null)), ArbThing, jsv.json));
   });
 });
 

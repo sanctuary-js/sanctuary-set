@@ -313,6 +313,8 @@ function intersect(set1, set2) {
               case TipType:
                 return set1.prefix === set2.prefix ? tip(set1.prefix, set1.bitmap & set2.bitmap) : Nil;
 
+              // I don't believe it is possible to ever reach here but
+              // it is better than the alternative of an infinite loop
               default:
                 return Nil;
             }
@@ -459,6 +461,7 @@ module.exports = {
   of,
   reduce,
   remove,
+  size,
   toArray,
   union
 };

@@ -283,6 +283,10 @@ module.exports = function Set(compare) {
     return Node(Leaf, x, Leaf);
   }
 
+  function size(xs) {
+    return xs.size;
+  }
+
   return {
     'fantasy-land/empty': empty,
     'fantasy-land/of': of,
@@ -296,6 +300,7 @@ module.exports = function Set(compare) {
     of,
     reduce,
     remove,
+    size,
     toArray,
     union
   };
