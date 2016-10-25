@@ -1,17 +1,15 @@
 'use strict';
 
-/**
- * A set specialised to 32bit integer values. The implementation is based on
- * "Fast Mergeable Integer Maps" -- http://ittc.ku.edu/~andygill/papers/IntMap98.pdf
- * and https://hackage.haskell.org/package/containers/docs/Data-IntSet.html
- */
+//  A set specialised to 32bit integer values. The implementation is based on
+//  "Fast Mergeable Integer Maps" -- http://ittc.ku.edu/~andygill/papers/IntMap98.pdf
+//  and https://hackage.haskell.org/package/containers/docs/Data-IntSet.html
 
 const
   BinType = 0,
   TipType = 1,
   NilType = 2;
 
-// contains left/right subtrees
+//  contains left/right subtrees
 function Bin(prefix, mask, left, right) {
   return {
     type: BinType,
@@ -22,14 +20,14 @@ function Bin(prefix, mask, left, right) {
   };
 }
 
-// smart constructor to ensure left/right is never Nil
+//  smart constructor to ensure left/right is never Nil
 function bin(prefix, mask, left, right) {
   if (right.type === NilType) return left;
   if (left.type === NilType) return right;
   return Bin(prefix, mask, left, right);
 }
 
-// contains a up to 32 values using a bitmap and common prefix
+//  contains a up to 32 values using a bitmap and common prefix
 function Tip(prefix, bitmap) {
   return {
     type: TipType,
@@ -38,15 +36,15 @@ function Tip(prefix, bitmap) {
   };
 }
 
-// smart constructor to ensure tip never contains a bitmap of 0
+//  smart constructor to ensure tip never contains a bitmap of 0
 function tip(prefix, bitmap) {
   return bitmap === 0 ? Nil : Tip(prefix, bitmap);
 }
 
-// an empty set
+//  an empty set
 const Nil = {type: NilType};
 
-// the number of elements in the set
+//  the number of elements in the set
 function size(set) {
   switch (set.type) {
     case BinType: return size(set.left) + size(set.right);
@@ -55,7 +53,7 @@ function size(set) {
   }
 }
 
-// the number of bits set in the given integer
+//  the number of bits set in the given integer
 function bitcount(_x) {
   let a = 0;
   let x = _x;
@@ -66,32 +64,32 @@ function bitcount(_x) {
   }
 }
 
-// returns a prefix of an int using the given mask bit
+//  returns a prefix of an int using the given mask bit
 function mask(i, m) {
   return (i & (~(m - 1) ^ m)) | 0;
 }
 
-// returns true if the given integer `i` masked by integer `m` equals 0
+//  returns true if the given integer `i` masked by integer `m` equals 0
 function zero(i, m) {
   return (i & m) === 0;
 }
 
-// returns true if the mask of the given int does _not_ match the given prefix
+//  returns true if the mask of the given int does _not_ match the given prefix
 function nomatch(i, p, m) {
   return mask(i, m) !== p;
 }
 
-// prefix of a value with the size of an int zeroed out at the lower end
+//  prefix of a value with the size of an int zeroed out at the lower end
 function prefixOf(x) {
   return x & ~31;
 }
 
-// the bitmap position for a given 32 bit int
+//  the bitmap position for a given 32 bit int
 function bitmapOf(x) {
   return 1 << (x & 31);
 }
 
-// returns true if the given int exists in the set
+//  returns true if the given int exists in the set
 function contains(x, _set) {
   let set = _set;
 
@@ -113,12 +111,12 @@ function contains(x, _set) {
   }
 }
 
-// uint comparison
+//  uint comparison
 function shorter(m1, m2) {
   return (m1 >>> 0) > (m2 >>> 0);
 }
 
-// the highest bit value of `p1 xor p2`
+//  the highest bit value of `p1 xor p2`
 function branchMask(p1, p2) {
   let v = p1 ^ p2;
   v |= v >>> 1;
@@ -130,19 +128,19 @@ function branchMask(p1, p2) {
   return v | 0;
 }
 
-// join two subtrees, with their respective prefixes
+//  join two subtrees, with their respective prefixes
 function link(p1, t1, p2, t2) {
   const m = branchMask(p1, p2);
   const p = mask(p1, m);
   return zero(p1, m) ? Bin(p, m, t1, t2) : Bin(p, m, t2, t1);
 }
 
-// adds the given int to the set
+//  adds the given int to the set
 function insert(x, set) {
   return insertBM(prefixOf(x), bitmapOf(x), set);
 }
 
-// inserts the prefix and bitmap into the given set
+//  inserts the prefix and bitmap into the given set
 function insertBM(prefix, bitmap, set) {
   switch (set.type) {
     case BinType:
@@ -168,12 +166,12 @@ function insertBM(prefix, bitmap, set) {
   }
 }
 
-// removes the given int from the set
+//  removes the given int from the set
 function remove(x, set) {
   return removeBM(prefixOf(x), bitmapOf(x), set);
 }
 
-// removes the prefix and bitmap from the given set
+//  removes the prefix and bitmap from the given set
 function removeBM(prefix, bitmap, set) {
   switch (set.type) {
     case BinType:
@@ -193,7 +191,7 @@ function removeBM(prefix, bitmap, set) {
   }
 }
 
-// returns a set containing the union of the two given sets
+//  returns a set containing the union of the two given sets
 function union(set1, set2) {
   switch (set1.type) {
     case BinType:
@@ -236,7 +234,7 @@ function union(set1, set2) {
   }
 }
 
-// returns a set containing all elements from `set1` that do not exist in `set2`
+//  returns a set containing all elements from `set1` that do not exist in `set2`
 function difference(set1, _set2) {
   let set2 = _set2;
 
@@ -298,7 +296,7 @@ function difference(set1, _set2) {
   }
 }
 
-// returns a set containing the intersection of the two given sets
+//  returns a set containing the intersection of the two given sets
 function intersect(_set1, _set2) {
   let set1 = _set1;
   let set2 = _set2;
@@ -336,8 +334,8 @@ function intersect(_set1, _set2) {
               case TipType:
                 return set1.prefix === set2.prefix ? tip(set1.prefix, set1.bitmap & set2.bitmap) : Nil;
 
-              // I don't believe it is possible to ever reach here but
-              // it is better than the alternative of an infinite loop
+              //  I don't believe it is possible to ever reach here but
+              //  it is better than the alternative of an infinite loop.
               default:
                 return Nil;
             }
@@ -372,24 +370,24 @@ function intersect(_set1, _set2) {
   }
 }
 
-// returns the empty set
+//  returns the empty set
 function empty() {
   return Nil;
 }
 
-// returns a singleton set containing the given value
+//  returns a singleton set containing the given value
 function of(x) {
   return Tip(prefixOf(x), bitmapOf(x));
 }
 
-// returns a set containing all values from the given Foldable instance
+//  returns a set containing all values from the given Foldable instance
 function fromFoldable(f) {
   return f.reduce(function fromFoldableF(t, k) {
     return insert(k, t);
   }, Nil);
 }
 
-// returns the lowest bit set for the given int
+//  returns the lowest bit set for the given int
 function lowestBitSet(_n) {
   let n = _n;
   let b = 0;
@@ -415,7 +413,7 @@ function lowestBitSet(_n) {
   return b;
 }
 
-// reduces over a prefix and bitmap using the given accumulating function and initial value
+//  reduces over a prefix and bitmap using the given accumulating function and initial value
 function reduceBits(prefix, f, _acc, bm) {
   let acc = _acc;
   const lb = lowestBitSet(bm);
@@ -431,7 +429,7 @@ function reduceBits(prefix, f, _acc, bm) {
   }
 }
 
-// reduces over the set using the given accumulating function and initial value
+//  reduces over the set using the given accumulating function and initial value
 function reduce(f, z, set) {
   function go(z_, set_) {
     switch (set_.type) {
@@ -452,7 +450,7 @@ function reduce(f, z, set) {
   }
 }
 
-// returns an array of all values in the set
+//  returns an array of all values in the set
 function toArray(t) {
   return reduce(function toArrayF(arr, k) {
     arr.push(k);
@@ -460,7 +458,7 @@ function toArray(t) {
   }, [], t);
 }
 
-// returns true if both sets are equal
+//  returns true if both sets are equal
 function equals(set1, set2) {
   switch (set1.type) {
     case BinType:

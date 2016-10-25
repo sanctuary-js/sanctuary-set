@@ -1,9 +1,7 @@
 'use strict';
 
-/**
- * AVL tree implementation of "Parallel Ordered Sets Using Join"
- * -- https://arxiv.org/abs/1602.02120
- */
+//  AVL tree implementation of "Parallel Ordered Sets Using Join"
+//  -- https://arxiv.org/abs/1602.02120
 module.exports = function Set(compare) {
 
   const Leaf = {height: 0, size: 0};
@@ -18,32 +16,32 @@ module.exports = function Set(compare) {
     };
   }
 
-  // given L < k < R, this will return the concatenation of L, k and R.
+  //  Given L < k < R, this will return the concatenation of L, k and R.
   function join(l, k, r) {
     if (l.height > 1 + r.height) {
-      // insert in R
+      //  insert in R
       return joinRight(l, k, r);
     } else if (r.height > 1 + l.height) {
-      // insert in L
+      //  insert in L
       return joinLeft(l, k, r);
     } else {
-      // no re-balance required
+      //  no re-balance required
       return Node(l, k, r);
     }
   }
 
-  // follow the left spine of R until a node (rl) is found
-  // with a height <= the height of L
+  //  Follow the left spine of R until a node (rl) is found
+  //  with a height <= the height of L.
   function joinLeft(l, k, r) {
     const rl = r.l, rk = r.k, rr = r.r;
     if (rl.height <= l.height + 1) {
-      // a new node is created to replace the previous rl
+      //  a new node is created to replace the previous rl
       const t = Node(l, k, rl);
       if (t.height <= rr.height + 1) {
-        // already balanced, return the new node
+        //  already balanced, return the new node
         return Node(t, rk, rr);
       } else {
-        // a double rotation necessary to re-balance
+        //  a double rotation necessary to re-balance
         return rotateRightLeft(t, rk, rr);
       }
     } else {
@@ -57,17 +55,17 @@ module.exports = function Set(compare) {
     }
   }
 
-  // follow the right spine of L until a node (lr) is found
-  // with a height <= the height of R
+  //  Follow the right spine of L until a node (lr) is found
+  //  with a height <= the height of R.
   function joinRight({l: ll, k: lk, r: lr}, k, r) {
     if (lr.height <= r.height + 1) {
-      // a new node is created to replace the previous lr
+      //  a new node is created to replace the previous lr
       const t = Node(lr, k, r);
       if (t.height <= ll.height + 1) {
-        // already balanced, return the new node
+        //  already balanced, return the new node
         return Node(ll, lk, t);
       } else {
-        // a double rotation necessary to re-balance
+        //  a double rotation necessary to re-balance
         return rotateLeftRight(ll, lk, t);
       }
     } else {
@@ -81,58 +79,58 @@ module.exports = function Set(compare) {
     }
   }
 
-  /**
-   *   2            4
-   *  / \          / \
-   * 1   4   =>   2   5
-   *    / \      / \
-   *   3   5    1   3
-   */
+  //
+  //    2            4
+  //   / \          / \
+  //  1   4   =>   2   5
+  //     / \      / \
+  //    3   5    1   3
+  //
   function rotateLeft(t) {
     return Node(Node(t.l, t.k, t.r.l), t.r.k, t.r.r);
   }
 
-  /**
-   *     4          2
-   *    / \        / \
-   *   2   5  =>  1   4
-   *  / \            / \
-   * 1   3          3   5
-   */
+  //
+  //      4          2
+  //     / \        / \
+  //    2   5  =>  1   4
+  //   / \            / \
+  //  1   3          3   5
+  //
   function rotateRight(t) {
     return Node(t.l.l, t.l.k, Node(t.l.r, t.k, t.r));
   }
 
-  /**
-   * 1
-   *  \       2
-   *   3 =>  / \
-   *  /     1   3
-   * 2
-   *
-   * equiv: rotateLeft(Node(l, k, rotateRight(r)))
-   */
+  //
+  //  1
+  //   \       2
+  //    3 =>  / \
+  //   /     1   3
+  //  2
+  //
+  //  equiv: rotateLeft(Node(l, k, rotateRight(r)))
+  //
   function rotateLeftRight(l, k, r) {
     return Node(Node(l, k, r.l.l), r.l.k, Node(r.l.r, r.k, r.r));
   }
 
-  /**
-   *   3
-   *  /      2
-   * 1  =>  / \  (RL Rotation)
-   *  \    1   3
-   *   2
-   *
-   * equiv: rotateRight(Node(rotateLeft(l), k, r))
-   */
+  //
+  //    3
+  //   /      2
+  //  1  =>  / \  (RL Rotation)
+  //   \    1   3
+  //    2
+  //
+  //  equiv: rotateRight(Node(rotateLeft(l), k, r))
+  //
   function rotateRightLeft(l, k, r) {
     return Node(Node(l.l, l.k, l.r.l), l.r.k, Node(l.r.r, k, r));
   }
 
-  // partitions a tree using the given key, returning
-  // an object containing the tree to the left and right
-  // of the key and a boolean `matched` property indicating
-  // whether the key existed in the given tree.
+  //  Partitions a tree using the given key, returning
+  //  an object containing the tree to the left and right
+  //  of the key and a boolean `matched` property indicating
+  //  whether the key existed in the given tree.
   function split(k, t) {
     if (t === Leaf) {
       return {l: t, r: t, match: false};
@@ -150,8 +148,8 @@ module.exports = function Set(compare) {
     }
   }
 
-  // returns the right-most key of the given set along
-  // with the subtree to the left of the right-most key
+  //  Returns the right-most key of the given set along
+  //  with the subtree to the left of the right-most key.
   function splitLast(t) {
     if (t.r === Leaf) {
       return {l: t.l, k: t.k};
@@ -161,7 +159,7 @@ module.exports = function Set(compare) {
     }
   }
 
-  // concatenates two sets
+  //  Concatenates two sets.
   function join2(tl, tr) {
     if (tl === Leaf) {
       return tr;
@@ -171,25 +169,23 @@ module.exports = function Set(compare) {
     }
   }
 
-  // insert a key into the set
+  //  Insert a key into the set.
   function insert(k, t) {
     const s = split(k, t);
     return join(s.l, k, s.r);
   }
 
-  // remove a key from the set
+  //  Remove a key from the set.
   function remove(k, t) {
     const s = split(k, t);
     return join2(s.l, s.r);
   }
 
-  // the union of two sets
+  //  The union of two sets.
   function union(t1, t2) {
     if (t1 === Leaf) {
-      // t1 is a Leaf
       return t2;
     } else if (t2 === Leaf) {
-      // t2 is a Leaf
       return t1;
     } else {
       const t_ = split(t2.k, t1);
@@ -199,13 +195,11 @@ module.exports = function Set(compare) {
     }
   }
 
-  // the intersection of two sets
+  //  The intersection of two sets.
   function intersect(t1, t2) {
     if (t1 === Leaf) {
-      // t1 is a Leaf
       return t1;
     } else if (t2 === Leaf) {
-      // t2 is a Leaf
       return t2;
     } else {
       const t_ = split(t2.k, t1);
@@ -215,7 +209,7 @@ module.exports = function Set(compare) {
     }
   }
 
-  // the difference of two sets (all keys in t1 that aren't members of t2)
+  //  The difference of two sets (all keys in t1 that aren't members of t2).
   function difference(t1, t2) {
     if (t1 === Leaf || t2 === Leaf) {
       return t1;
@@ -227,11 +221,9 @@ module.exports = function Set(compare) {
     }
   }
 
-  /**
-   * It would be nice to just reuse `split(k, t).match` here
-   * but it turns out to be quite a bit slower than the direct
-   * traverse and compare as implemented here.
-   */
+  //  It would be nice to just reuse `split(k, t).match` here
+  //  but it turns out to be quite a bit slower than the direct
+  //  traverse and compare as implemented here.
   function contains(k, _t) {
     let c;
     let t = _t;
@@ -248,7 +240,7 @@ module.exports = function Set(compare) {
     return false;
   }
 
-  // fold over a set
+  //  Fold over a set.
   function reduce(f, z, t) {
     if (t === Leaf) {
       return z;
@@ -257,14 +249,14 @@ module.exports = function Set(compare) {
     }
   }
 
-  // takes a FL foldable instance and converts it to a set
+  //  Takes a FL foldable instance and converts it to a set.
   function fromFoldable(f) {
     return f.reduce(function fromFoldableF(t, k) {
       return insert(k, t);
     }, Leaf);
   }
 
-  // convert a set to an array
+  //  Convert a set to an array.
   function toArray(t) {
     return reduce(function toArrayF(arr, k) {
       arr.push(k);
