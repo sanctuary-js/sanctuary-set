@@ -15,9 +15,9 @@ describe('PrimSet', () => {
 });
 
 describe('BoxedSet', () => {
-  const Thing = function Thing(x) {
+  function Thing(x) {
     this.x = x;
-  };
+  }
   const ArbThing = jsv.number.smap(n => new Thing(n), thing => thing.x);
   describe('Homogeneous', () => {
     spec(BoxedSet, jsv.number);
