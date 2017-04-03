@@ -12,11 +12,11 @@
     "test": "make lint test"
   },
   "devDependencies": {
-    "eslint": "2.9.x",
+    "eslint": "3.19.x",
     "istanbul": "0.4.x",
     "jsverify": "0.7.x",
     "mocha": "3.1.x",
-    "sanctuary-style": "0.4.x",
+    "sanctuary-style": "0.5.x",
     "xyz": "2.0.x"
   },
   "files": [
