@@ -8,18 +8,18 @@ const BoxedSet = require('../src/BoxedSet');
 const IntSet   = require('../src/IntSet');
 
 
-describe('PrimSet', () => {
+test('PrimSet', () => {
   spec(PrimSet, jsv.number);
   spec(PrimSet, jsv.string);
   spec(PrimSet, jsv.bool);
 });
 
-describe('BoxedSet', () => {
+test('BoxedSet', () => {
   function Thing(x) {
     this.x = x;
   }
   const ArbThing = jsv.number.smap(n => new Thing(n), thing => thing.x);
-  describe('Homogeneous', () => {
+  test('Homogeneous', () => {
     spec(BoxedSet, jsv.number);
     spec(BoxedSet, jsv.string);
     spec(BoxedSet, jsv.bool);
@@ -27,11 +27,11 @@ describe('BoxedSet', () => {
     spec(BoxedSet, jsv.array(jsv.number));
     spec(BoxedSet, ArbThing);
   });
-  describe('Heterogeneous', () => {
+  test('Heterogeneous', () => {
     spec(BoxedSet, jsv.oneof(jsv.constant(Object.create(null)), ArbThing, jsv.json));
   });
 });
 
-describe('IntSet', () => {
+test('IntSet', () => {
   spec(IntSet, jsv.int32);
 });

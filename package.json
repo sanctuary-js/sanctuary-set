@@ -7,18 +7,16 @@
     "type": "git",
     "url": "git://github.com/sanctuary-js/sanctuary-set.git"
   },
-  "main": "src/BoxedSet.js",
   "scripts": {
-    "test": "make lint test"
+    "doctest": "sanctuary-doctest",
+    "lint": "sanctuary-lint",
+    "release": "sanctuary-release",
+    "test": "npm run lint && sanctuary-test && npm run doctest"
   },
   "dependencies": {},
   "devDependencies": {
-    "eslint": "3.19.x",
-    "istanbul": "0.4.x",
     "jsverify": "0.7.x",
-    "mocha": "3.1.x",
-    "sanctuary-style": "0.5.x",
-    "xyz": "2.0.x"
+    "sanctuary-scripts": "sanctuary-js/sanctuary-scripts#64d6cacb7fef537d5ebf7bbd8354139ed6d715c1"
   },
   "files": [
     "/src"
