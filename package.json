@@ -11,6 +11,7 @@
   "scripts": {
     "test": "make lint test"
   },
+  "dependencies": {},
   "devDependencies": {
     "eslint": "3.19.x",
     "istanbul": "0.4.x",
