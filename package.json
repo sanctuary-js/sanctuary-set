@@ -16,7 +16,7 @@
   "dependencies": {},
   "devDependencies": {
     "jsverify": "0.7.x",
-    "sanctuary-scripts": "sanctuary-js/sanctuary-scripts#bca58462b2c007956b8f9acf7af21e374fdec380"
+    "sanctuary-scripts": "1.0.x"
   },
   "files": [
     "/src"
