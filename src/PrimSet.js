@@ -1,6 +1,6 @@
 'use strict';
 
-const BaseSet = require('./BaseSet');
+var BaseSet = require('./BaseSet');
 
 module.exports = BaseSet(function compare(x, y) {
   if (x === y) return 0;

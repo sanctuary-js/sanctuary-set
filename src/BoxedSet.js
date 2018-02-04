@@ -1,6 +1,6 @@
 'use strict';
 
-const BaseSet = require('./BaseSet');
+var BaseSet = require('./BaseSet');
 
 function compareObject(x, y) {
   if (x.constructor !== y.constructor) {
@@ -13,20 +13,20 @@ function compareObject(x, y) {
     return x.constructor.name < y.constructor.name ? -1 : 1;
   }
 
-  const xKeys = Object.keys(x);
-  const yKeys = Object.keys(y);
+  var xKeys = Object.keys(x);
+  var yKeys = Object.keys(y);
   if (xKeys.length !== yKeys.length) return xKeys.length < yKeys.length ? -1 : 1;
 
   xKeys.sort();
-  const xKeysStr = xKeys.join(',');
+  var xKeysStr = xKeys.join(',');
 
   yKeys.sort();
-  const yKeysStr = yKeys.join(',');
+  var yKeysStr = yKeys.join(',');
 
   if (xKeysStr !== yKeysStr) return xKeysStr < yKeysStr ? -1 : 1;
 
-  for (const p of xKeys) {
-    const res = compare(x[p], y[p]);
+  for (var p of xKeys) {
+    var res = compare(x[p], y[p]);
     if (res === 1) {
       return 1;
     }
@@ -42,7 +42,7 @@ function compareArray(x, y) {
   if (x.length !== y.length) {
     return x.length < y.length ? -1 : 1;
   }
-  let i = 0, order;
+  var i = 0, order;
   while (i < x.length) {
     order = compare(x[i], y[i]);
     if (order !== 0) {
@@ -59,14 +59,14 @@ function objectType(a) {
 
 function compare(x, y) {
   if (x === y) return 0;
-  const typeX = objectType(x);
-  const typeY = objectType(y);
+  var typeX = objectType(x);
+  var typeY = objectType(y);
   if (typeX !== typeY) return typeX < typeY ? -1 : 1;
   switch (typeX) {
     case 'Number':
     case 'String':
     case 'Boolean':
-      const x_ = x.valueOf(), y_ = y.valueOf();
+      var x_ = x.valueOf(), y_ = y.valueOf();
       return x_ === y_ ? 0 : x_ < y_ ? -1 : 1;
   }
   if (typeX === 'Array') return compareArray(x, y);

@@ -4,7 +4,7 @@
 //  -- https://arxiv.org/abs/1602.02120
 module.exports = function Set(compare) {
 
-  const Leaf = {height: 0, size: 0};
+  var Leaf = {height: 0, size: 0};
 
   function Node(l, k, r) {
     return {
@@ -33,10 +33,10 @@ module.exports = function Set(compare) {
   //  Follow the left spine of R until a node (rl) is found
   //  with a height <= the height of L.
   function joinLeft(l, k, r) {
-    const rl = r.l, rk = r.k, rr = r.r;
+    var rl = r.l, rk = r.k, rr = r.r;
     if (rl.height <= l.height + 1) {
       //  a new node is created to replace the previous rl
-      const t = Node(l, k, rl);
+      var t = Node(l, k, rl);
       if (t.height <= rr.height + 1) {
         //  already balanced, return the new node
         return Node(t, rk, rr);
@@ -45,8 +45,8 @@ module.exports = function Set(compare) {
         return rotateRightLeft(t, rk, rr);
       }
     } else {
-      const t  = joinLeft(l, k, rl);
-      const t_ = Node(t, rk, rr);
+      var t  = joinLeft(l, k, rl);
+      var t_ = Node(t, rk, rr);
       if (t.height <= rr.height + 1) {
         return t_;
       } else {
@@ -57,10 +57,13 @@ module.exports = function Set(compare) {
 
   //  Follow the right spine of L until a node (lr) is found
   //  with a height <= the height of R.
-  function joinRight({l: ll, k: lk, r: lr}, k, r) {
+  function joinRight(lkr, k, r) {
+    var ll = lkr.l;
+    var lk = lkr.k;
+    var lr = lkr.r;
     if (lr.height <= r.height + 1) {
       //  a new node is created to replace the previous lr
-      const t = Node(lr, k, r);
+      var t = Node(lr, k, r);
       if (t.height <= ll.height + 1) {
         //  already balanced, return the new node
         return Node(ll, lk, t);
@@ -69,8 +72,8 @@ module.exports = function Set(compare) {
         return rotateLeftRight(ll, lk, t);
       }
     } else {
-      const t  = joinRight(lr, k, r);
-      const t_ = Node(ll, lk, t);
+      var t  = joinRight(lr, k, r);
+      var t_ = Node(ll, lk, t);
       if (t.height <= ll.height + 1) {
         return t_;
       } else {
@@ -135,15 +138,19 @@ module.exports = function Set(compare) {
     if (t === Leaf) {
       return {l: t, r: t, match: false};
     } else {
-      const order = compare(k, t.k);
+      var order = compare(k, t.k);
       if (order === 0) {
         return {l: t.l, r: t.r, match: true};
       } else if (order < 0) {
-        const {l, r, match} = split(k, t.l);
-        return {l, r: join(r, t.k, t.r), match};
+        var lrmatch = split(k, t.l);
+        return {l: lrmatch.l,
+                r: join(lrmatch.r, t.k, t.r),
+                match: lrmatch.match};
       } else {
-        const {l, r, match} = split(k, t.r);
-        return {l: join(t.l, t.k, l), r, match};
+        var lrmatch = split(k, t.r);
+        return {l: join(t.l, t.k, lrmatch.l),
+                r: lrmatch.r,
+                match: lrmatch.match};
       }
     }
   }
@@ -154,7 +161,7 @@ module.exports = function Set(compare) {
     if (t.r === Leaf) {
       return {l: t.l, k: t.k};
     } else {
-      const s = splitLast(t.r);
+      var s = splitLast(t.r);
       return {l: join(t.l, t.k, s.l), k: s.k};
     }
   }
@@ -164,20 +171,20 @@ module.exports = function Set(compare) {
     if (tl === Leaf) {
       return tr;
     } else {
-      const s = splitLast(tl);
+      var s = splitLast(tl);
       return join(s.l, s.k, tr);
     }
   }
 
   //  Insert a key into the set.
   function insert(k, t) {
-    const s = split(k, t);
+    var s = split(k, t);
     return join(s.l, k, s.r);
   }
 
   //  Remove a key from the set.
   function remove(k, t) {
-    const s = split(k, t);
+    var s = split(k, t);
     return join2(s.l, s.r);
   }
 
@@ -188,9 +195,9 @@ module.exports = function Set(compare) {
     } else if (t2 === Leaf) {
       return t1;
     } else {
-      const t_ = split(t2.k, t1);
-      const tl = union(t_.l, t2.l); // ---- damn single-threaded JS
-      const tr = union(t_.r, t2.r); // _/
+      var t_ = split(t2.k, t1);
+      var tl = union(t_.l, t2.l); // ---- damn single-threaded JS
+      var tr = union(t_.r, t2.r); // _/
       return join(tl, t2.k, tr);
     }
   }
@@ -202,9 +209,9 @@ module.exports = function Set(compare) {
     } else if (t2 === Leaf) {
       return t2;
     } else {
-      const t_ = split(t2.k, t1);
-      const tl = intersect(t_.l, t2.l); // ---- damn single-threaded JS
-      const tr = intersect(t_.r, t2.r); // _/
+      var t_ = split(t2.k, t1);
+      var tl = intersect(t_.l, t2.l); // ---- damn single-threaded JS
+      var tr = intersect(t_.r, t2.r); // _/
       return t_.match ? join(tl, t2.k, tr) : join2(tl, tr);
     }
   }
@@ -214,9 +221,9 @@ module.exports = function Set(compare) {
     if (t1 === Leaf || t2 === Leaf) {
       return t1;
     } else {
-      const t_ = split(t2.k, t1);
-      const tl = difference(t_.l, t2.l); // ---- damn single-threaded JS
-      const tr = difference(t_.r, t2.r); // _/
+      var t_ = split(t2.k, t1);
+      var tl = difference(t_.l, t2.l); // ---- damn single-threaded JS
+      var tr = difference(t_.r, t2.r); // _/
       return join2(tl, tr);
     }
   }
@@ -225,8 +232,8 @@ module.exports = function Set(compare) {
   //  but it turns out to be quite a bit slower than the direct
   //  traverse and compare as implemented here.
   function contains(k, _t) {
-    let c;
-    let t = _t;
+    var c;
+    var t = _t;
     while (t.height > 0) {
       c = compare(k, t.k);
       if (c === 0) {

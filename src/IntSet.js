@@ -4,7 +4,7 @@
 //  "Fast Mergeable Integer Maps" -- http://ittc.ku.edu/~andygill/papers/IntMap98.pdf
 //  and https://hackage.haskell.org/package/containers/docs/Data-IntSet.html
 
-const
+var
   BinType = 0,
   TipType = 1,
   NilType = 2;
@@ -42,7 +42,7 @@ function tip(prefix, bitmap) {
 }
 
 //  an empty set
-const Nil = {type: NilType};
+var Nil = {type: NilType};
 
 //  the number of elements in the set
 function size(set) {
@@ -55,8 +55,8 @@ function size(set) {
 
 //  the number of bits set in the given integer
 function bitcount(_x) {
-  let a = 0;
-  let x = _x;
+  var a = 0;
+  var x = _x;
   while (true) {
     if (x === 0) return a;
     a += 1;
@@ -91,7 +91,7 @@ function bitmapOf(x) {
 
 //  returns true if the given int exists in the set
 function contains(x, _set) {
-  let set = _set;
+  var set = _set;
 
   while (true) {
     switch (set.type) {
@@ -118,7 +118,7 @@ function shorter(m1, m2) {
 
 //  the highest bit value of `p1 xor p2`
 function branchMask(p1, p2) {
-  let v = p1 ^ p2;
+  var v = p1 ^ p2;
   v |= v >>> 1;
   v |= v >>> 2;
   v |= v >>> 4;
@@ -130,8 +130,8 @@ function branchMask(p1, p2) {
 
 //  join two subtrees, with their respective prefixes
 function link(p1, t1, p2, t2) {
-  const m = branchMask(p1, p2);
-  const p = mask(p1, m);
+  var m = branchMask(p1, p2);
+  var p = mask(p1, m);
   return zero(p1, m) ? Bin(p, m, t1, t2) : Bin(p, m, t2, t1);
 }
 
@@ -236,7 +236,7 @@ function union(set1, set2) {
 
 //  returns a set containing all elements from `set1` that do not exist in `set2`
 function difference(set1, _set2) {
-  let set2 = _set2;
+  var set2 = _set2;
 
   switch (set1.type) {
     case BinType:
@@ -298,8 +298,8 @@ function difference(set1, _set2) {
 
 //  returns a set containing the intersection of the two given sets
 function intersect(_set1, _set2) {
-  let set1 = _set1;
-  let set2 = _set2;
+  var set1 = _set1;
+  var set2 = _set2;
 
   switch (set1.type) {
     case BinType:
@@ -389,8 +389,8 @@ function fromFoldable(f) {
 
 //  returns the lowest bit set for the given int
 function lowestBitSet(_n) {
-  let n = _n;
-  let b = 0;
+  var n = _n;
+  var b = 0;
   if ((n & 0xFFFF) === 0) {
     n >>>= 16;
     b = 16;
@@ -415,10 +415,10 @@ function lowestBitSet(_n) {
 
 //  reduces over a prefix and bitmap using the given accumulating function and initial value
 function reduceBits(prefix, f, _acc, bm) {
-  let acc = _acc;
-  const lb = lowestBitSet(bm);
-  let bi = prefix + lb;
-  let n = bm >>> lb;
+  var acc = _acc;
+  var lb = lowestBitSet(bm);
+  var bi = prefix + lb;
+  var n = bm >>> lb;
   while (true) {
     if (n === 0) return acc;
     if ((n & 1) === 1) {

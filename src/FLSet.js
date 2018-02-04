@@ -1,6 +1,6 @@
 'use strict';
 
-const BaseSet = require('./BaseSet');
+var BaseSet = require('./BaseSet');
 
 //  TODO: Propose addition of Ord to FL.
 module.exports = BaseSet(function compare(x, y) {
