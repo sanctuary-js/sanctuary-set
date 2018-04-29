@@ -1,3 +1,5 @@
 {
-  "dependencies": {}
+  "dependencies": {
+    "sanctuary-show": "1.0.x"
+  }
 }

@@ -13,7 +13,9 @@
     "release": "sanctuary-release",
     "test": "npm run lint && sanctuary-test && npm run doctest"
   },
-  "dependencies": {},
+  "dependencies": {
+    "sanctuary-show": "1.0.x"
+  },
   "devDependencies": {
     "jsverify": "0.7.x",
     "sanctuary-scripts": "1.5.x"
