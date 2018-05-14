@@ -17,7 +17,7 @@
     "sanctuary-show": "1.0.x"
   },
   "devDependencies": {
-    "jsverify": "0.7.x",
+    "jsverify": "0.8.x",
     "sanctuary-scripts": "1.6.x"
   },
   "files": [
