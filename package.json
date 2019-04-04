@@ -18,7 +18,7 @@
   },
   "devDependencies": {
     "jsverify": "0.8.x",
-    "sanctuary-scripts": "sanctuary-js/sanctuary-scripts#ae8bfe9acca55bd583d65b920127f6726cf3e192"
+    "sanctuary-scripts": "3.2.x"
   },
   "files": [
     "/src"
