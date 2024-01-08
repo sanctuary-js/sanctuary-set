@@ -1,3 +1,7 @@
+import test from 'oletus';
+
+globalThis.it = test;
+
 import jsv from 'jsverify';
 
 export default (Set, Arb) => {
