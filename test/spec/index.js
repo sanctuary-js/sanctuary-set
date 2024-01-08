@@ -1,8 +1,6 @@
-'use strict';
+import jsv from 'jsverify';
 
-const jsv = require ('jsverify');
-
-module.exports = (Set, Arb) => {
+export default (Set, Arb) => {
 
   const SetArb = (jsv.array (Arb)).smap (
     Set.fromFoldable,

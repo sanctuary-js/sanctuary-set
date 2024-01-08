@@ -5,6 +5,7 @@
   "overrides": [
     {
       "files": ["test/**/*.js"],
+      "parserOptions": {"sourceType": "module"},
       "globals": {"describe": "readonly", "it": "readonly"}
     }
   ]

@@ -1,11 +1,9 @@
-'use strict';
+import jsv from 'jsverify';
+import spec from './spec/index.js';
 
-const jsv = require ('jsverify');
-const spec = require ('./spec');
-
-const PrimSet  = require ('../src/PrimSet');
-const BoxedSet = require ('../src/BoxedSet');
-const IntSet   = require ('../src/IntSet');
+import PrimSet from '../src/PrimSet.js';
+import BoxedSet from '../src/BoxedSet.js';
+import IntSet from '../src/IntSet.js';
 
 
 describe ('PrimSet', () => {
