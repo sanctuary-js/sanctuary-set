@@ -1,5 +1,3 @@
-'use strict';
-
 //  A set specialised to 32bit integer values. The implementation is based on
 //  "Fast Mergeable Integer Maps" -- http://ittc.ku.edu/~andygill/papers/IntMap98.pdf
 //  and https://hackage.haskell.org/package/containers/docs/Data-IntSet.html
@@ -527,7 +525,7 @@ function equals(set1, set2) {
   }
 }
 
-module.exports = {
+export default {
   'fantasy-land/empty': empty,
   'fantasy-land/of': of,
   contains,

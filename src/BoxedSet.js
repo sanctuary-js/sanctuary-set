@@ -1,6 +1,4 @@
-'use strict';
-
-const BaseSet = require ('./BaseSet');
+import BaseSet from './BaseSet.js';
 
 const compareObject = (x, y) => {
   if (x.constructor !== y.constructor) {
@@ -76,4 +74,4 @@ const compare = (x, y) => {
   return compareObject (x, y);
 };
 
-module.exports = BaseSet (compare);
+export default BaseSet (compare);

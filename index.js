@@ -1,5 +1,3 @@
-'use strict';
+import BoxedSet from './src/BoxedSet.js';
 
-/* eslint-env node */
-
-module.exports = require ('./src/BoxedSet');
+export default BoxedSet;

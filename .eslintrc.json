@@ -1,12 +1,11 @@
 {
   "root": true,
   "extends": ["./node_modules/sanctuary-style/eslint.json"],
-  "env": {"node": true},
+  "parserOptions": {"sourceType": "module"},
+  "globals": {"globalThis": "readonly"},
   "overrides": [
     {
       "files": ["test/**/*.js"],
-      "parserOptions": {"sourceType": "module"},
-      "globals": {"globalThis": "readonly"},
       "rules": {
         "max-len": ["off"]
       }

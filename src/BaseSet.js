@@ -1,8 +1,6 @@
-'use strict';
-
 //  AVL tree implementation of "Parallel Ordered Sets Using Join"
 //  -- https://arxiv.org/abs/1602.02120
-module.exports = compare => {
+export default compare => {
 
   const Leaf = {height: 0, size: 0};
 
