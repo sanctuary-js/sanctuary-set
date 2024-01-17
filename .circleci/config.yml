@@ -1,0 +1,19 @@
+version: 2.1
+
+orbs:
+  node: circleci/node@5.1.0
+
+workflows:
+  test:
+    jobs:
+      - node/test:
+          setup:
+            # derive cache key from package.json
+            - run: cp package.json package-lock.json
+          override-ci-command: rm package-lock.json && npm install && git checkout -- package.json
+          matrix:
+            parameters:
+              version:
+                - 18.0.0
+                - 20.0.0
+                - 21.0.0

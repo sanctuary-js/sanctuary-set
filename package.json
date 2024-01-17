@@ -1,0 +1,36 @@
+{
+  "name": "sanctuary-set",
+  "version": "0.0.0",
+  "description": "Fantasy Land compliant immutable set type",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/sanctuary-js/sanctuary-set.git"
+  },
+  "type": "module",
+  "exports": {
+    ".": "./index.js",
+    "./package.json": "./package.json"
+  },
+  "scripts": {
+    "doctest": "sanctuary-doctest",
+    "lint": "sanctuary-lint",
+    "release": "sanctuary-release",
+    "test": "npm run lint && sanctuary-test && npm run doctest"
+  },
+  "dependencies": {
+    "sanctuary-show": "2.0.0"
+  },
+  "devDependencies": {
+    "jsverify": "0.8.x",
+    "sanctuary-scripts": "7.0.x"
+  },
+  "files": [
+    "/src"
+  ],
+  "keywords": [
+    "fantasy-land",
+    "immutable",
+    "set"
+  ]
+}
